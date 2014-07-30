@@ -1,6 +1,8 @@
 package com.example
 
 import com.fasterxml.uuid.{EthernetAddress, Generators}
+import java.util.UUID
+import scala.collection.mutable
 
 object UUIDs {
 
@@ -28,6 +30,8 @@ object UUIDs {
 
   def hexUUID(tenant: Int, objectType: Int, times: Int = 1) = {
     binaryUUID(1, 1, 1).toList.map { x => byte2Hex(x)}.mkString
+    //generator.generate().toString
+    //UUID.randomUUID().toString
   }
 
   val number = '0' to '9' toList
@@ -86,5 +90,12 @@ object UUIDs {
     val key3 = base64UUID(1, 1, 1)
     println(key3)
     println(key3.length)
+
+    val ids = new mutable.HashSet[String]
+
+    1 to Integer.MAX_VALUE foreach { _ =>
+      val id = hexUUID(1,1,1)
+      if (!ids.add(id)) throw new RuntimeException
+    }
   }
 }
