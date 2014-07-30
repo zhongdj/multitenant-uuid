@@ -16,7 +16,8 @@ object UUIDs {
     val innerUUID = generator.generate()
     val result = new Array[Byte](22)
 
-    int2Bytes(tenant, result, 0)
+    tenantBytes(tenant, result, 0)
+    result.update(3, (objectType >>> 12 & 0xFF).toByte)
     result.update(4, (objectType >>> 4 & 0xFF).toByte)
     result.update(5, (objectType << 4 & 0x30 | times & 0x0F).toByte)
     long2Bytes(innerUUID.getMostSignificantBits, result, 6)
@@ -39,8 +40,8 @@ object UUIDs {
   def base64UUID(tenant: Int, objectType: Int, times: Int = 1) = {
     val bytes = binaryUUID(1, 1, 1)
 
-    val tenantChars = to64(byte2Long(bytes(0)) << 24 | byte2Long(bytes(1)) << 16 | byte2Long(bytes(2)) << 8 | byte2Long(bytes(3)), 6)
-    val objectTypeChars = to64(byte2Long(bytes(4)) << 4 | byte2Long(bytes(5)) >>> 4, 2)
+    val tenantChars = to64(byte2Long(bytes(0)) << 16 | byte2Long(bytes(1)) << 8 | byte2Long(bytes(2)), 4)
+    val objectTypeChars = to64(byte2Long(bytes(3)) << 12 | byte2Long(bytes(4)) << 4 | byte2Long( bytes(5) & 0xF0 toByte ) >>> 4, 4)
     val timesChar = to64(byte2Long(bytes(5)) & 0x0F, 1)
     val high = to64(byte2Long(bytes(6)) << 56 | byte2Long(bytes(7)) << 48 | byte2Long(bytes(8)) << 40 | byte2Long(bytes(9)) << 32 | byte2Long(bytes(10)) << 24 | byte2Long(bytes(11)) << 16 | byte2Long(bytes(12)) << 8 | byte2Long(bytes(13)), 11)
     val low = to64(byte2Long(bytes(14)) << 56 | byte2Long(bytes(15)) << 48 | byte2Long(bytes(16)) << 40 | byte2Long(bytes(17)) << 32 | byte2Long(bytes(18)) << 24 | byte2Long(bytes(19)) << 16 | byte2Long(bytes(20)) << 8 | byte2Long(bytes(21)), 11)
@@ -50,9 +51,9 @@ object UUIDs {
 
   def byte2Long(b: Byte) = binaryLong & b
 
-  def int2Bytes(value: Int, result: Array[Byte], offset: Int) = {
-    4 to 1 by -1 foreach { x =>
-      result.update(offset + 4 - x, value >>> 8 * (x - 1) & 0xFF toByte)
+  def tenantBytes(value: Int, result: Array[Byte], offset: Int) = {
+    3 to 1 by -1 foreach { x =>
+      result.update(offset + 3 - x, value >>> 8 * (x - 1) & 0xFF toByte)
     }
   }
 
@@ -85,9 +86,5 @@ object UUIDs {
     val key3 = base64UUID(1, 1, 1)
     println(key3)
     println(key3.length)
-
-
-    println(binaryLong & 0x8FFFFFFF)
-    println(0x8FFFFFFF toLong)
   }
 }
