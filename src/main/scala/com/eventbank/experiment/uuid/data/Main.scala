@@ -1,9 +1,10 @@
 package com.eventbank.experiment.uuid.data
 
 import akka.actor.Actor
-import com.eventbank.experiment.uuid.data.TenantDataGenerator.{HexPK, Complete, BinaryPK, InsertOp}
+import com.eventbank.experiment.uuid.data.TenantDataGenerator._
 import java.util.concurrent.Executor
 import scala.concurrent.ExecutionContext
+import com.eventbank.experiment.uuid.data.TenantDataGenerator.InsertOp
 
 /**
  * Created by geek on 7/30/14.
@@ -15,7 +16,8 @@ class Main extends Actor {
   1 to 100 foreach { x => context.actorOf(TenantDataGenerator.props(x), "data-gen-" + x)}
 
 //  context.children foreach { x => x ! InsertOp(HexPK)}
-  context.children foreach { x => x ! InsertOp(BinaryPK)}
+  //context.children foreach { x => x ! InsertOp(BinaryPK)}
+  context.children foreach { x => x ! InsertOp(AutoIncremental)}
 
   override def receive: Receive = {
     case Complete => println(sender.path + " finished creating data")

@@ -73,6 +73,28 @@ class TenantDataGenerator(tenantId: Int) extends Actor {
     UUIDs.binaryUUID(tenantId, 1, 1)
   }
 
+  def doGenerateAutoIncr(targetSize: Int) {
+    if (targetSize > 0) {
+      val num = Random.nextInt(2000)
+      if (num > 0) {
+        val autoIncInsert = e.insertInto(TBL_AUTO_PK_UUID, TBL_AUTO_PK_UUID.FIRST_NAME, TBL_AUTO_PK_UUID.LAST_NAME, TBL_AUTO_PK_UUID.EMAIL, TBL_AUTO_PK_UUID.TENANT_ID)
+        1 to num foreach { x => autoIncInsert.values(firstName, lastName, email, tenantId)}
+        try {
+          autoIncInsert.execute()
+          connection.commit()
+        }
+        finally {
+          connection.rollback()
+        }
+      }
+
+      doGenerateAutoIncr(targetSize - num)
+    } else {
+      connection.close()
+      context.stop(self)
+    }
+
+  }
   def doGenerateHex(targetSize: Int) {
     if (targetSize > 0) {
       val num = Random.nextInt(2000)
@@ -111,11 +133,13 @@ class TenantDataGenerator(tenantId: Int) extends Actor {
     id
   }
 
+
   override def receive: Receive = LoggingReceive {
 
 
     case InsertOp(strategy) => strategy match {
       case AutoIncremental =>
+        doGenerateAutoIncr(total)
       case BinaryPK =>
         doGenerateBinary(total)
         sender ! Complete
