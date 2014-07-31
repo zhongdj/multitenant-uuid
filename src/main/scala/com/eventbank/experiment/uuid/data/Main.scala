@@ -18,9 +18,12 @@ class Main extends Actor {
   //context.children foreach { x => x ! InsertOp(HexPK)}
   context.children foreach { x => x ! InsertOp(BinaryPK)}
   //context.children foreach { x => x ! InsertOp(AutoIncremental)}
-
+  var left : Int = 100
   override def receive: Receive = {
-    case Complete => println(sender.path + " finished creating data")
+    case Complete =>
+      println(sender.path + " finished creating data")
+      left -= 1
+      if (left == 0) context.stop(self)
     case message => println(message)
   }
 }
