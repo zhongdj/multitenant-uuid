@@ -15,9 +15,9 @@ class Main extends Actor {
 
   1 to 100 foreach { x => context.actorOf(TenantDataGenerator.props(x), "data-gen-" + x)}
 
-//  context.children foreach { x => x ! InsertOp(HexPK)}
-  //context.children foreach { x => x ! InsertOp(BinaryPK)}
-  context.children foreach { x => x ! InsertOp(AutoIncremental)}
+  //context.children foreach { x => x ! InsertOp(HexPK)}
+  context.children foreach { x => x ! InsertOp(BinaryPK)}
+  //context.children foreach { x => x ! InsertOp(AutoIncremental)}
 
   override def receive: Receive = {
     case Complete => println(sender.path + " finished creating data")
