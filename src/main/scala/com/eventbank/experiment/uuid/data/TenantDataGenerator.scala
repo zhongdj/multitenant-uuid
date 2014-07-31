@@ -22,8 +22,6 @@ class TenantDataGenerator(tenantId: Int) extends Actor {
 
   //@scala.throws[T](classOf[scala.Exception])
   override def postStop(): Unit = {
-
-    println("actor stopped =========================================================================================")
     if (!connection.isClosed) connection.close()
   }
 
