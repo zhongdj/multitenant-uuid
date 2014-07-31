@@ -12,7 +12,7 @@ scalaVersion := "2.10.2"
 seq(jooqSettings: _*)
 
 libraryDependencies ++= Seq(
-  jdbc,
+  //jdbc,
   //anorm,
   //cache,
   //ws,
