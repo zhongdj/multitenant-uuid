@@ -1,7 +1,6 @@
 package com.example
 
 import com.fasterxml.uuid.{EthernetAddress, Generators}
-import java.util.UUID
 import scala.collection.mutable
 
 object UUIDs {
@@ -21,7 +20,7 @@ object UUIDs {
     tenantBytes(tenant, result, 0)
     result.update(3, (objectType >>> 12 & 0xFF).toByte)
     result.update(4, (objectType >>> 4 & 0xFF).toByte)
-    result.update(5, (objectType << 4 & 0x30 | times & 0x0F).toByte)
+    result.update(5, (objectType << 4 & 0xF0 | times & 0x0F).toByte)
     long2Bytes(innerUUID.getMostSignificantBits, result, 6)
     long2Bytes(innerUUID.getLeastSignificantBits, result, 14)
 
@@ -55,9 +54,21 @@ object UUIDs {
 
   def byte2Long(b: Byte) = binaryLong & b
 
-  def tenantBytes(value: Int, result: Array[Byte], offset: Int) = {
+  /**
+    * Extract three bytes of tenentId and put them to result.
+   *  For example:
+   *  tenantId in binary: 00000000 00100001 00001000 00000011
+   *           result[0]: teneantId >>>16 => 00000000 00000000 00000000 00100001 & 0xFF =>  00100001
+   *           result[1]: teneantId >>>8  => 00000000 00000000 00100001 00001000 & 0xFF =>  00001000
+   *           result[2]: teneantId >>>>0 => 00000000 00100001 00001000 00000011 & 0xFF =>  00000011
+   *
+    * @param tenantId
+    * @param result
+    * @param offset
+    */
+  def tenantBytes(tenantId: Int, result: Array[Byte], offset: Int) = {
     3 to 1 by -1 foreach { x =>
-      result.update(offset + 3 - x, value >>> 8 * (x - 1) & 0xFF toByte)
+      result.update(offset + 3 - x, tenantId >>> 8 * (x - 1) & 0xFF toByte)
     }
   }
 
