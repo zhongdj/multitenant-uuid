@@ -31,7 +31,7 @@ jooqVersion := "3.4.0"
 
 jooqOptions := Seq(
   "jdbc.driver" -> "com.mysql.jdbc.Driver",
-  "jdbc.url" -> "jdbc:mysql://localhost:3306/test",
+  "jdbc.url" -> "jdbc:mysql://dbserver:3306/test",
   "jdbc.user" -> "ebdev",
   "jdbc.password" -> "000000",
   "generator.database.name" -> "org.jooq.util.mysql.MySQLDatabase",
