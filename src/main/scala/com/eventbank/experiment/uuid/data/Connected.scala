@@ -10,7 +10,7 @@ import org.jooq.impl.{DefaultVisitListener, DefaultVisitListenerProvider, Defaul
  */
 trait Connected {
   Class.forName("com.mysql.jdbc.Driver")
-  lazy val connection: Connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "ebdev", "000000")
+  lazy val connection: Connection = DriverManager.getConnection("jdbc:mysql://dbserver:3306/test", "boo", "1q2w3e4r5t")
   connection.setAutoCommit(false)
   val configuration = new DefaultConfiguration()
   configuration.set(connection)
