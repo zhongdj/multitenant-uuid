@@ -14,10 +14,10 @@ class ReadMain extends Actor {
 
   implicit val exec = context.dispatcher.asInstanceOf[Executor with ExecutionContext]
 
-  96 to 100 foreach { x => context.actorOf(TenantRandomRangeReader.props(x), "data-reader-" + x)}
+  1 to 100 foreach { x => context.actorOf(TenantRandomRangeReader.props(x), "data-reader-" + x)}
 
-  context.children foreach { x => x ! ReadOp(HexPK)}
-  //context.children foreach { x => x ! ReadOp(BinaryPK)}
+  //context.children foreach { x => x ! ReadOp(HexPK)}
+  context.children foreach { x => x ! ReadOp(BinaryPK)}
   //context.children foreach { x => x ! ReadOp(AutoIncremental)}
   var left : Int = 100
   override def receive: Receive = {
