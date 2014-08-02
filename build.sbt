@@ -32,8 +32,8 @@ jooqVersion := "3.4.0"
 jooqOptions := Seq(
   "jdbc.driver" -> "com.mysql.jdbc.Driver",
   "jdbc.url" -> "jdbc:mysql://dbserver:3306/test",
-  "jdbc.user" -> "ebdev",
-  "jdbc.password" -> "000000",
+  "jdbc.user" -> "boo",
+  "jdbc.password" -> "1q2w3e4r5t",
   "generator.database.name" -> "org.jooq.util.mysql.MySQLDatabase",
   "generator.database.inputSchema" -> "test",
   "generator.target.packageName" -> "com.eventbank.model.gen.trans",
