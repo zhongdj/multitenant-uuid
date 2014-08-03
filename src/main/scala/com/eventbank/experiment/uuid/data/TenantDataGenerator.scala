@@ -41,9 +41,11 @@ class TenantDataGenerator(tenantId: Int) extends Actor with Connected {
 
   private val total: Int = 100000
 
+  val batchMax: Int = 2000
+
   def doGenerateBinary(targetSize: Int = total) {
     if (targetSize > 0) {
-      val num = Random.nextInt(2000)
+      val num = if (targetSize < batchMax) targetSize else Random.nextInt(batchMax)
       if (num > 0) {
         val binaryInsert = e.insertInto(TBL_BINARY_PK_UUID, TBL_BINARY_PK_UUID.ID, TBL_BINARY_PK_UUID.FIRST_NAME, TBL_BINARY_PK_UUID.LAST_NAME, TBL_BINARY_PK_UUID.EMAIL, TBL_BINARY_PK_UUID.TENANT_ID)
         1 to num foreach { x => binaryInsert.values(binaryId, firstName, lastName, email, tenantId)}
@@ -67,11 +69,9 @@ class TenantDataGenerator(tenantId: Int) extends Actor with Connected {
     UUIDs.binaryUUID(tenantId, 1, 1)
   }
 
-  val batchMax: Int = 2000
-
   def doGenerateAutoIncr(targetSize: Int) {
     if (targetSize > 0) {
-      val num = Random.nextInt(batchMax)
+      val num = if (targetSize < batchMax) targetSize else Random.nextInt(batchMax)
       if (num > 0) {
         val autoIncInsert = e.insertInto(TBL_AUTO_PK_UUID, TBL_AUTO_PK_UUID.FIRST_NAME, TBL_AUTO_PK_UUID.LAST_NAME, TBL_AUTO_PK_UUID.EMAIL, TBL_AUTO_PK_UUID.TENANT_ID)
         1 to num foreach { x => autoIncInsert.values(firstName, lastName, email, tenantId)}
@@ -94,7 +94,7 @@ class TenantDataGenerator(tenantId: Int) extends Actor with Connected {
 
   def doGenerateHex(targetSize: Int) {
     if (targetSize > 0) {
-      val num = Random.nextInt(batchMax)
+      val num = if (targetSize < batchMax) targetSize else Random.nextInt(batchMax)
       if (num > 0) {
         val hexInsert = e.insertInto(TBL_16CHAR_PK_UUID, TBL_16CHAR_PK_UUID.ID, TBL_16CHAR_PK_UUID.FIRST_NAME, TBL_16CHAR_PK_UUID.LAST_NAME, TBL_16CHAR_PK_UUID.EMAIL, TBL_16CHAR_PK_UUID.TENANT_ID)
         1 to num foreach { x => hexInsert.values(hexId, firstName, lastName, email, tenantId)}
