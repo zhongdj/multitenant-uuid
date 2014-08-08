@@ -1,5 +1,6 @@
 package com.eventbank.experiment.uuid.data
 
+import _root_.scala.annotation.tailrec
 import java.util.concurrent.Executor
 
 import akka.actor.{Props, Actor}
@@ -50,7 +51,7 @@ class TenantRandomRangeReader(tenantId : Int) extends Actor with Connected {
 
   val singleMax: Int = 2000
 
-  def readThroughAuto(offset: Int) {
+  @tailrec final def readThroughAuto(offset: Int) {
     val num = singleMax//Random.nextInt(singleMax)
     val result = for (r: Record <- e
       select(TBL_AUTO_PK_UUID.FIRST_NAME, TBL_AUTO_PK_UUID.LAST_NAME, TBL_AUTO_PK_UUID.EMAIL, TBL_AUTO_PK_UUID.TENANT_ID)
@@ -65,7 +66,7 @@ class TenantRandomRangeReader(tenantId : Int) extends Actor with Connected {
     else context.stop(self)
 
   }
-  def readThroughBinary(offset: Int) {
+  @tailrec final def readThroughBinary(offset: Int) {
     val num = singleMax//Random.nextInt(singleMax)
     val result = for (r: Record <- e
       select(TBL_BINARY_PK_UUID.FIRST_NAME, TBL_BINARY_PK_UUID.LAST_NAME, TBL_BINARY_PK_UUID.EMAIL, TBL_BINARY_PK_UUID.TENANT_ID)
@@ -80,7 +81,7 @@ class TenantRandomRangeReader(tenantId : Int) extends Actor with Connected {
     else context.stop(self)
   }
 
-  def readThroughHex(offset: Int) {
+  @tailrec final def readThroughHex(offset: Int) {
     val num = singleMax//Random.nextInt(singleMax)
     val result = for (r: Record <- e
       select(TBL_16CHAR_PK_UUID.FIRST_NAME, TBL_16CHAR_PK_UUID.LAST_NAME, TBL_16CHAR_PK_UUID.EMAIL, TBL_16CHAR_PK_UUID.TENANT_ID)
@@ -97,6 +98,6 @@ class TenantRandomRangeReader(tenantId : Int) extends Actor with Connected {
 }
 
 object TenantRandomRangeReader {
-  def props(tenantId: Int): Props = Props(classOf[TenantRandomRangeReader], tenantId)
+  def props(tenantId: Int): Props = Props(classOf[TenantRandomRangeReader], tenantId).withDispatcher("my-dispatcher")
 
 }

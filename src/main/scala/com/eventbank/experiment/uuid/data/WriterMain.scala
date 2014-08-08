@@ -17,7 +17,7 @@ class WriterMain extends Actor {
 
   //context.children foreach { x => x ! InsertOp(HexPK)}
   context.children foreach { x => x ! InsertOp(BinaryPK)}
-  //context.children foreach { x => x ! InsertOp(AutoIncremental)}
+  context.children foreach { x => x ! InsertOp(AutoIncremental)}
   var left : Int = 100
   override def receive: Receive = {
     case Complete =>

@@ -2,6 +2,7 @@ package com.eventbank.experiment.uuid.data
 
 import _root_.scala.concurrent.ExecutionContext
 import _root_.scala.util.Random
+import _root_.scala.annotation.tailrec
 import akka.actor.{Props, Actor}
 import akka.event.LoggingReceive
 import com.eventbank.model.gen.trans.Tables._
@@ -22,6 +23,7 @@ class TenantDataGenerator(tenantId: Int) extends Actor with Connected {
 
   //@scala.throws[T](classOf[scala.Exception])
   override def postStop(): Unit = {
+    super.postStop
     sender ! Complete
     close
   }
@@ -41,9 +43,9 @@ class TenantDataGenerator(tenantId: Int) extends Actor with Connected {
 
   private val total: Int = 100000
 
-  val batchMax: Int = 2000
+  val batchMax: Int = 5
 
-  def doGenerateBinary(targetSize: Int = total) {
+  @tailrec final def doGenerateBinary(targetSize: Int = total) {
     if (targetSize > 0) {
       val num = if (targetSize < batchMax) targetSize else Random.nextInt(batchMax)
       if (num > 0) {
@@ -69,7 +71,7 @@ class TenantDataGenerator(tenantId: Int) extends Actor with Connected {
     UUIDs.binaryUUID(tenantId, 1, 1)
   }
 
-  def doGenerateAutoIncr(targetSize: Int) {
+  @tailrec final def doGenerateAutoIncr(targetSize: Int) {
     if (targetSize > 0) {
       val num = if (targetSize < batchMax) targetSize else Random.nextInt(batchMax)
       if (num > 0) {
@@ -92,7 +94,7 @@ class TenantDataGenerator(tenantId: Int) extends Actor with Connected {
 
   }
 
-  def doGenerateHex(targetSize: Int) {
+  @tailrec final def doGenerateHex(targetSize: Int) {
     if (targetSize > 0) {
       val num = if (targetSize < batchMax) targetSize else Random.nextInt(batchMax)
       if (num > 0) {
@@ -122,8 +124,6 @@ class TenantDataGenerator(tenantId: Int) extends Actor with Connected {
 
 
   override def receive: Receive = LoggingReceive {
-
-
     case InsertOp(strategy) => strategy match {
       case AutoIncremental =>
         doGenerateAutoIncr(total)
@@ -133,13 +133,11 @@ class TenantDataGenerator(tenantId: Int) extends Actor with Connected {
         doGenerateHex(total)
       case Base64PK =>
     }
-
-
   }
 }
 
 object TenantDataGenerator {
-  def props(tenantId: Int): Props = Props(classOf[TenantDataGenerator], tenantId)
+  def props(tenantId: Int): Props = Props(classOf[TenantDataGenerator], tenantId).withDispatcher("my-dispatcher")
 
 
   abstract class UUIDStrategy
@@ -151,6 +149,8 @@ object TenantDataGenerator {
   case object HexPK extends UUIDStrategy
 
   case object Base64PK extends UUIDStrategy
+
+  case object ComboPK extends UUIDStrategy
 
   abstract class Message
 

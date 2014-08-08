@@ -1,3 +1,7 @@
+DROP DATABASE IF EXISTS test;
+CREATE DATABASE test;
+USE test;
+
 DROP TABLE IF EXISTS tbl_64char_pk_uuid;
 CREATE TABLE tbl_64char_pk_uuid (
 `id`  char(32) CHARACTER SET `ascii` collate `ascii_general_ci` PRIMARY KEY ,
@@ -39,3 +43,4 @@ CREATE TABLE `tbl_binary_pk_uuid` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE tbl_binary_pk_uuid ADD INDEX binary_tenant_id_index (tenant_id);
+
