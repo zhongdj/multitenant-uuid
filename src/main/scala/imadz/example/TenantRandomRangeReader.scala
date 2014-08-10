@@ -58,9 +58,12 @@ class TenantRandomRangeReader(tenantId : Int) extends Actor with Connected {
       offset offset
       fetch
     ) yield r
-
+    commit
     if (result.size > 0) readThroughAuto(offset + result.size)
-    else context.stop(self)
+    else {
+      close
+      context.stop(self)
+    }
 
   }
   @tailrec final def readThroughBinary(offset: Int) {
@@ -73,9 +76,12 @@ class TenantRandomRangeReader(tenantId : Int) extends Actor with Connected {
       offset offset
       fetch
     ) yield r
-
+    commit
     if (result.size > 0) readThroughBinary(offset + result.size)
-    else context.stop(self)
+    else {
+      close
+      context.stop(self)
+    }
   }
 
   @tailrec final def readThroughHex(offset: Int) {
@@ -88,9 +94,12 @@ class TenantRandomRangeReader(tenantId : Int) extends Actor with Connected {
       offset offset
       fetch
     ) yield r
-
+    commit
     if (result.size > 0) readThroughHex(offset + result.size)
-    else context.stop(self)
+    else {
+      close
+      context.stop(self)
+    }
   }
 }
 

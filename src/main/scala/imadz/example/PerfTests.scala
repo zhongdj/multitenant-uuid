@@ -9,6 +9,7 @@ import imadz.example.ReadMain
 import fr.janalyse.ssh.SSHOptions
 import java.util.concurrent.locks.ReentrantLock
 import imadz.example.TenantDataGenerator.{AutoIncremental, BinaryPK}
+import net.imadz.performance.PerformanceDataUI
 
 /**
  * Created by geek on 14-8-10.
@@ -19,18 +20,30 @@ object PerfTests extends App {
   val lock = new ReentrantLock
   val condition = lock.newCondition()
 
-  "Query against Binary UUID" collect (List(Cpu, Mem, IO, Network)) run {
+  val xs = "Query against Binary UUID" collect (List(Cpu, Mem, IO, Network)) run {
     actorOf(classOf[ReadMain], "binary-reader") { reader =>
       reader ! BinaryPK
     }
   }
 
-  "Query against AutoIncremental PK" collect (List(Cpu, Mem, IO, Network)) run {
+  val ys = "Query against AutoIncremental PK" collect (List(Cpu, Mem, IO, Network)) run {
     actorOf(classOf[ReadMain], "binary-reader") { reader =>
       reader ! AutoIncremental
     }
   }
 
+  val iox = xs filter (isIO) head
+  val ioy = ys filter (isIO) head
+
+  def isIO: (Monitor) => Boolean = {
+    case x: IOMonitor => true
+    case _ => false
+  }
+
+  PerformanceDataUI.setSourceFile1(iox.logFile.get + ".updated")
+  PerformanceDataUI.setSourceFile2(ioy.logFile.get + ".updated")
+
+  PerformanceDataUI.main(Array[String]())
 
   def actorOf(actorClass: Class[ReadMain], actorName: String)(f: ActorRef => Unit) = {
     val system = ActorSystem("Main")

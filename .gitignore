@@ -15,3 +15,5 @@ rfm-busi
 rfm-sys
 
 *.log
+
+*.updated
