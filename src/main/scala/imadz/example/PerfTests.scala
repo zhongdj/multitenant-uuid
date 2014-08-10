@@ -15,7 +15,7 @@ import net.imadz.performance.PerformanceDataUI
  * Created by geek on 14-8-10.
  */
 object PerfTests extends App {
-  implicit val sshOptions = SSHOptions(host = "dbserver", username = "techop", password = SSHPassword.string2password("hai_5631"))
+  implicit val sshOptions = SSHOptions(host = "dbserver", username = "techop", password = SSHPassword.string2password("techop"))
 
   val lock = new ReentrantLock
   val condition = lock.newCondition()
