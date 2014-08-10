@@ -8,6 +8,7 @@ import scala.util.control.NonFatal
 import imadz.example.ReadMain
 import fr.janalyse.ssh.SSHOptions
 import java.util.concurrent.locks.ReentrantLock
+import imadz.example.TenantDataGenerator.{AutoIncremental, BinaryPK}
 
 /**
  * Created by geek on 14-8-10.
@@ -19,10 +20,24 @@ object PerfTests extends App {
   val condition = lock.newCondition()
 
   "Query against Binary UUID" collect (List(Cpu, Mem, IO, Network)) run {
+    actorOf(classOf[ReadMain], "binary-reader") { reader =>
+      reader ! BinaryPK
+    }
+  }
+
+  "Query against AutoIncremental PK" collect (List(Cpu, Mem, IO, Network)) run {
+    actorOf(classOf[ReadMain], "binary-reader") { reader =>
+      reader ! AutoIncremental
+    }
+  }
+
+
+  def actorOf(actorClass: Class[ReadMain], actorName: String)(f: ActorRef => Unit) = {
     val system = ActorSystem("Main")
     try {
-      val reader = system.actorOf(Props(classOf[ReadMain]), "binary-reader")
+      val reader = system.actorOf(Props(actorClass), actorName)
       system.actorOf(Props(classOf[Terminator], reader), "app-terminator")
+      f(reader)
     } catch {
       case NonFatal(e) ⇒ system.shutdown(); throw e
     }
@@ -30,7 +45,6 @@ object PerfTests extends App {
     condition.await()
     lock.unlock()
   }
-
 
   class Terminator(app: ActorRef) extends Actor with ActorLogging {
     context watch app

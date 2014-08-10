@@ -16,11 +16,14 @@ class ReadMain extends Actor {
 
   1 to 100 foreach { x => context.actorOf(TenantRandomRangeReader.props(x), "data-reader-" + x)}
 
-  //context.children foreach { x => x ! ReadOp(HexPK)}
-  context.children foreach { x => x ! ReadOp(BinaryPK)}
-  //context.children foreach { x => x ! ReadOp(AutoIncremental)}
   var left : Int = 100
   override def receive: Receive = {
+    case BinaryPK =>
+      context.children foreach { x => x ! ReadOp(BinaryPK)}
+    case HexPK =>
+      context.children foreach { x => x ! ReadOp(HexPK)}
+    case AutoIncremental =>
+      context.children foreach { x => x ! ReadOp(AutoIncremental)}
     case Complete =>
       println(sender.path + " finished read data")
       left -= 1
