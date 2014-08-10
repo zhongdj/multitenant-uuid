@@ -13,3 +13,5 @@ activator
 rfm-busi
 
 rfm-sys
+
+*.log

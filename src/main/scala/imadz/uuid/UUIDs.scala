@@ -1,4 +1,4 @@
-package com.example
+package imadz.uuid
 
 import com.fasterxml.uuid.{EthernetAddress, Generators}
 import scala.collection.mutable

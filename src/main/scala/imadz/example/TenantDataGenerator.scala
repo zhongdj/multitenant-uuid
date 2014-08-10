@@ -1,20 +1,15 @@
-package com.eventbank.experiment.uuid.data
+package imadz.example
 
 import _root_.scala.concurrent.ExecutionContext
 import _root_.scala.util.Random
 import _root_.scala.annotation.tailrec
 import akka.actor.{Props, Actor}
 import akka.event.LoggingReceive
-import com.eventbank.model.gen.trans.Tables._
-import com.example.UUIDs
-import java.sql.DriverManager
 import TenantDataGenerator._
-import java.sql.Connection
-import org.jooq._
-import org.jooq.impl._
 import java.util.concurrent.Executor
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.Hashtable
+import imadz.uuid.UUIDs
+import imadz.model.gen.Tables._
 
 /**
  * Created by geek on 7/30/14.

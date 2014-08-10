@@ -1,23 +1,20 @@
-package com.eventbank.experiment.uuid.data
+package imadz.example
 
 import _root_.scala.annotation.tailrec
 import java.util.concurrent.Executor
 
 import akka.actor.{Props, Actor}
-import akka.actor.Actor.Receive
 import akka.event.LoggingReceive
-import com.eventbank.experiment.uuid.data.TenantDataGenerator._
-import com.eventbank.model.gen.trans.Tables._
 
 import scala.concurrent.ExecutionContext
-import scala.util.Random
-
-import collection.JavaConversions._
+import imadz.model.gen.Tables._
 
 import org.jooq._
 import org.jooq.impl._
 import org.jooq.impl.DSL._
 import org.jooq.scala.Conversions._
+import collection.JavaConversions._
+import imadz.example.TenantDataGenerator._
 
 /**
  * Created by Barry on 8/1/2014.

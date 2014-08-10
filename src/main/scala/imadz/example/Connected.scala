@@ -1,8 +1,8 @@
-package com.eventbank.experiment.uuid.data
+package imadz.example
 
 import java.sql.{DriverManager, Connection}
 
-import org.jooq.{SelectQuery, VisitContext, Configuration, SQLDialect}
+import org.jooq.{VisitContext, SQLDialect}
 import org.jooq.impl.{DefaultVisitListener, DefaultVisitListenerProvider, DefaultConfiguration, DSL}
 
 /**

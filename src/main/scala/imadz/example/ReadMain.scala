@@ -1,11 +1,11 @@
-package com.eventbank.experiment.uuid.data
+package imadz.example
 
 import java.util.concurrent.Executor
 
 import akka.actor.Actor
-import com.eventbank.experiment.uuid.data.TenantDataGenerator._
 
 import scala.concurrent.ExecutionContext
+import imadz.example.TenantDataGenerator._
 
 /**
  * Created by Barry on 8/1/2014.
@@ -22,7 +22,7 @@ class ReadMain extends Actor {
   var left : Int = 100
   override def receive: Receive = {
     case Complete =>
-      println(sender.path + " finished creating data")
+      println(sender.path + " finished read data")
       left -= 1
       if (left == 0) context.stop(self)
     case message => println(message)

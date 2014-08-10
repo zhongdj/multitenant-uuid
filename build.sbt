@@ -36,7 +36,7 @@ jooqOptions := Seq(
   "jdbc.password" -> "1q2w3e4r5t",
   "generator.database.name" -> "org.jooq.util.mysql.MySQLDatabase",
   "generator.database.inputSchema" -> "test",
-  "generator.target.packageName" -> "com.eventbank.model.gen.trans",
+  "generator.target.packageName" -> "imadz.model.gen",
   "generator.generate.pojos" -> "true",
   "generator.generate.daos" -> "true",
   "generator.generate.jpaAnnotations" -> "true",
@@ -47,3 +47,4 @@ jooqOptions := Seq(
 // Uncomment to use Akka
 libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.3.3"
 
+libraryDependencies += "net.imadz" %% "perf-test-lib" % "1.0"

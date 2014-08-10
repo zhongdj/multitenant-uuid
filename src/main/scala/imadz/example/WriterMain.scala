@@ -1,11 +1,9 @@
-package com.eventbank.experiment.uuid.data
+package imadz.example
 
 import akka.actor.Actor
-import com.eventbank.experiment.uuid.data.TenantDataGenerator._
 import java.util.concurrent.Executor
 import scala.concurrent.ExecutionContext
-import com.eventbank.experiment.uuid.data.TenantDataGenerator.InsertOp
-
+import TenantDataGenerator._
 /**
  * Created by geek on 7/30/14.
  */
