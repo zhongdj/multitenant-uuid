@@ -1,15 +1,16 @@
-package imadz.example
+package imadz.experiments.pk
 
 import _root_.scala.concurrent.ExecutionContext
 import _root_.scala.util.Random
 import _root_.scala.annotation.tailrec
 import akka.actor.{Props, Actor}
 import akka.event.LoggingReceive
-import TenantDataGenerator._
 import java.util.concurrent.Executor
 import java.util.concurrent.atomic.AtomicInteger
 import imadz.uuid.UUIDs
+import imadz.jdbc.Connected
 import imadz.model.gen.Tables._
+import imadz.experiments.pk.Consts._
 
 /**
  * Created by geek on 7/30/14.
@@ -135,25 +136,7 @@ object TenantDataGenerator {
   def props(tenantId: Int): Props = Props(classOf[TenantDataGenerator], tenantId).withDispatcher("my-dispatcher")
 
 
-  abstract class UUIDStrategy
 
-  case object AutoIncremental extends UUIDStrategy
-
-  case object BinaryPK extends UUIDStrategy
-
-  case object HexPK extends UUIDStrategy
-
-  case object Base64PK extends UUIDStrategy
-
-  case object ComboPK extends UUIDStrategy
-
-  abstract class Message
-
-  case class InsertOp(strategy: UUIDStrategy) extends Message
-
-  case class ReadOp(strategy: UUIDStrategy) extends Message
-
-  case object Complete extends Message
 
 
 }

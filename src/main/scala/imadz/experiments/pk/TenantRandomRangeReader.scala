@@ -1,4 +1,4 @@
-package imadz.example
+package imadz.experiments.pk
 
 import _root_.scala.annotation.tailrec
 import java.util.concurrent.Executor
@@ -7,14 +7,15 @@ import akka.actor.{Props, Actor}
 import akka.event.LoggingReceive
 
 import scala.concurrent.ExecutionContext
-import imadz.model.gen.Tables._
 
 import org.jooq._
 import org.jooq.impl._
 import org.jooq.impl.DSL._
-import org.jooq.scala.Conversions._
 import collection.JavaConversions._
-import imadz.example.TenantDataGenerator._
+import org.jooq.scala.Conversions._
+import imadz.jdbc.Connected
+import imadz.experiments.pk.Consts._
+import imadz.model.gen.Tables._
 
 /**
  * Created by Barry on 8/1/2014.

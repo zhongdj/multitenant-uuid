@@ -32,8 +32,8 @@ jooqVersion := "3.4.0"
 jooqOptions := Seq(
   "jdbc.driver" -> "com.mysql.jdbc.Driver",
   "jdbc.url" -> "jdbc:mysql://dbserver:3306/test",
-  "jdbc.user" -> "boo",
-  "jdbc.password" -> "1q2w3e4r5t",
+  "jdbc.user" -> "ebadmin",
+  "jdbc.password" -> "111111",
   "generator.database.name" -> "org.jooq.util.mysql.MySQLDatabase",
   "generator.database.inputSchema" -> "test",
   "generator.target.packageName" -> "imadz.model.gen",

@@ -1,20 +1,21 @@
-package imadz.example
+package imadz.experiments.cases
 
 import java.util.concurrent.Executor
 
 import akka.actor.Actor
 
 import scala.concurrent.ExecutionContext
-import imadz.example.TenantDataGenerator._
+import imadz.experiments.pk.{TenantRandomRangeReader, TenantDataGenerator}
+import imadz.experiments.pk.Consts._
 
 /**
  * Created by Barry on 8/1/2014.
  */
-class ReadMain extends Actor {
+class MultiTenantsReadSimulator extends Actor {
 
   implicit val exec = context.dispatcher.asInstanceOf[Executor with ExecutionContext]
 
-  9 to 10 foreach { x => context.actorOf(TenantRandomRangeReader.props(x), "data-reader-" + x)}
+  1 to 10 foreach { x => context.actorOf(TenantRandomRangeReader.props(x), "data-reader-" + x)}
 
   var left : Int = 2
   override def receive: Receive = {
