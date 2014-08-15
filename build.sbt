@@ -48,3 +48,8 @@ jooqOptions := Seq(
 libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.3.3"
 
 libraryDependencies += "net.imadz" %% "perf-test-lib" % "1.0"
+
+libraryDependencies += "org.slf4j" % "slf4j-log4j12" % "1.6.6"
+
+libraryDependencies += "log4j" % "log4j" % "1.2.13"
+
