@@ -2,12 +2,13 @@ package imadz.jdbc
 
 import java.sql.{DriverManager, Connection}
 
-import org.jooq.{VisitContext, SQLDialect}
-import org.jooq.impl.{DefaultVisitListener, DefaultVisitListenerProvider, DefaultConfiguration, DSL}
-
+import org.jooq._
+import org.jooq.impl._
+import org.jooq.impl.DSL._
 /**
  * Created by Barry on 8/1/2014.
  */
+
 trait Connected {
   Class.forName("com.mysql.jdbc.Driver")
   lazy val connection: Connection = DriverManager.getConnection("jdbc:mysql://dbserver:3306/test", "ebadmin", "111111")
@@ -16,14 +17,29 @@ trait Connected {
   configuration.set(connection)
   configuration.set(SQLDialect.MYSQL)
   configuration.set(new DefaultVisitListenerProvider(new DefaultVisitListener() {
-    override def clauseStart(context: VisitContext): Unit = {
+
+    override def visitStart(context: VisitContext): Unit = {
       super.clauseStart(context)
-      val oldPart = context.queryPart()
-      println(oldPart.getClass + ":" + oldPart.toString)
+      val c = context.clause
+      val p = context.queryPart
+      if (c == Clause.SELECT_SELECT && null != context.renderContext) {
+         context.renderContext.keyword("SQL_NO_CACHE").sql(" ")
+      }
     }
   }))
 
-  lazy val e = DSL.using(connection, SQLDialect.MYSQL)
+
+
+  configuration.set(new DefaultExecuteListenerProvider(new DefaultExecuteListener() {
+    override def executeStart(ctx: ExecuteContext): Unit = {
+      super.executeStart(ctx)
+      println(ctx.sql())
+    }
+  }))
+  configuration.set(SQLDialect.MYSQL)
+
+  lazy val e = DSL.using(configuration)
+  //lazy val e = DSL.using(connection, SQLDialect.MYSQL)
 
 
   def commit {
