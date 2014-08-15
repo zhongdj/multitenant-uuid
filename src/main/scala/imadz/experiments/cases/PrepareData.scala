@@ -8,12 +8,12 @@ import imadz.experiments.pk.Consts._
  */
 object PrepareData extends App {
 
-  actorOf(classOf[MultiTenantsWriteSimulator], "binary-writer") { writer =>
-    writer ! BinaryPK
-  }
-  actorOf(classOf[MultiTenantsWriteSimulator], "auto-incremental-writer") { writer =>
-    writer ! AutoIncremental
-  }
+//  actorOf(classOf[MultiTenantsWriteSimulator], "binary-writer") { writer =>
+//    writer ! BinaryPK
+//  }
+//  actorOf(classOf[MultiTenantsWriteSimulator], "auto-incremental-writer") { writer =>
+//    writer ! AutoIncremental
+//  }
   actorOf(classOf[MultiTenantsWriteSimulator], "hex-writer") { writer =>
     writer ! HexPK
   }
