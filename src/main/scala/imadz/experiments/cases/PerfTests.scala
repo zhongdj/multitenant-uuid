@@ -27,7 +27,7 @@ object PerfTests extends App {
     }
   }
 
-  val zs = "Query against AutoIncremental PK" collect (List(Cpu, Mem, IO, Network)) run {
+  val zs = "Query against Hex PK" collect (List(Cpu, Mem, IO, Network)) run {
     actorOf(classOf[MultiTenantsReadSimulator], "hex-reader") { reader =>
       reader ! HexPK
     }

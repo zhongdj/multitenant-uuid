@@ -46,7 +46,6 @@ class TenantRandomRangeReader(tenantId : Int) extends Actor with Connected {
 
   }
 
-
   val singleMax: Int = 2000
 
   @tailrec final def readThroughAuto(offset: Int) {
