@@ -41,7 +41,7 @@ object PerfTests extends App {
   }
 
   PerformanceDataUI.sources = iox map {
-    _.logFile.get
+    _.logFile.get + ".updated"
   }
 
   PerformanceDataUI.main(Array[String]())

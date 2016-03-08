@@ -11,7 +11,7 @@ import org.jooq.impl.DSL._
 
 trait Connected {
   Class.forName("com.mysql.jdbc.Driver")
-  lazy val connection: Connection = DriverManager.getConnection("jdbc:mysql://dbserver:3306/test", "ebadmin", "28270033")
+  lazy val connection: Connection = DriverManager.getConnection("jdbc:mysql://dbserver:3306/test", "ebadmin", "000000")
   connection.setAutoCommit(false)
   val configuration = new DefaultConfiguration()
   configuration.set(connection)

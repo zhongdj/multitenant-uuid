@@ -26,6 +26,8 @@ class MultiTenantsWriteSimulator extends Actor {
       context.children foreach { x => x ! InsertOp(AutoIncremental)}
     case HexPK =>
       context.children foreach { x => x ! InsertOp(HexPK)}
+    case ComboPK =>
+      context.children foreach { _ ! InsertOp(ComboPK)}
     case message => println(message)
   }
 }

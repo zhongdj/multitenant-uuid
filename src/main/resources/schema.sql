@@ -44,3 +44,13 @@ CREATE TABLE `tbl_binary_pk_uuid` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE tbl_binary_pk_uuid ADD INDEX binary_tenant_id_index (tenant_id);
 
+DROP TABLE IF EXISTS tbl_combo_pk;
+CREATE TABLE `tbl_combo_pk` (
+  `tenant_id` int(10) NOT NULL,
+  `id` int(10) NOT NULL,
+  `first_name` varchar(200) DEFAULT NULL,
+  `last_name` varchar(200) DEFAULT NULL,
+  `email` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`tenant_id`, `id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

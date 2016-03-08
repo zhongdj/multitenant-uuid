@@ -111,6 +111,28 @@ class TenantDataGenerator(tenantId: Int) extends Actor with Connected {
       context.stop(self)
     }
   }
+  var base = 0
+  @tailrec final def doGenerateCombo(targetSize: Int) {
+    if (targetSize > 0) {
+      val num = if (targetSize < batchMax) targetSize else Random.nextInt(batchMax)
+      if (num > 0) {
+        val comboInsert = e.insertInto(TBL_COMBO_PK, TBL_COMBO_PK.TENANT_ID, TBL_COMBO_PK.ID, TBL_COMBO_PK.FIRST_NAME, TBL_COMBO_PK.LAST_NAME, TBL_COMBO_PK.EMAIL)
+        1 to num foreach { x => comboInsert.values(tenantId, base + x, firstName, lastName, email)}
+        try {
+          base += comboInsert.execute()
+          commit
+        }
+        finally {
+          rollback
+        }
+      }
+
+      doGenerateCombo(targetSize - num)
+    } else {
+      close
+      context.stop(self)
+    }
+  }
 
   val invokeCounter = new AtomicInteger(0)
 
@@ -127,6 +149,8 @@ class TenantDataGenerator(tenantId: Int) extends Actor with Connected {
         doGenerateBinary(total)
       case HexPK =>
         doGenerateHex(total)
+      case ComboPK =>
+        doGenerateCombo(total)
       case Base64PK =>
     }
   }

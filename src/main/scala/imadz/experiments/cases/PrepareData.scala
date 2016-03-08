@@ -14,8 +14,11 @@ object PrepareData extends App {
 //  actorOf(classOf[MultiTenantsWriteSimulator], "auto-incremental-writer") { writer =>
 //    writer ! AutoIncremental
 //  }
-  actorOf(classOf[MultiTenantsWriteSimulator], "hex-writer") { writer =>
-    writer ! HexPK
+  actorOf(classOf[MultiTenantsWriteSimulator], "combo-writer") { writer =>
+    writer ! ComboPK
   }
+//  actorOf(classOf[MultiTenantsWriteSimulator], "hex-writer") { writer =>
+//    writer ! HexPK
+//  }
 
 }
