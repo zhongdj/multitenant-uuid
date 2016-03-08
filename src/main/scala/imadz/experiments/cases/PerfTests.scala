@@ -13,7 +13,7 @@ import imadz.experiments.pk.Consts._
  */
 object PerfTests extends App {
 
-  implicit val sshOptions = SSHOptions(host = "dbserver", username = "root", password = SSHPassword.string2password("111111"))
+  implicit val sshOptions = SSHOptions(host = "dbserver", username = "root", password = SSHPassword.string2password("28270033"))
 
   val xs = "Query against Binary UUID" collect (List(Cpu, Mem, IO, Network)) run {
     actorOf(classOf[MultiTenantsReadSimulator], "binary-reader") { reader =>
