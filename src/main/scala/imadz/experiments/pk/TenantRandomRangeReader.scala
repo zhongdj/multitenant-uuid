@@ -40,6 +40,8 @@ class TenantRandomRangeReader(tenantId : Int) extends Actor with Connected {
           readThroughBinary(0)
         case HexPK =>
           readThroughHex(0)
+        case ComboPK =>
+          readThroughComboPK(0)
         case Base64PK => throw new UnsupportedOperationException
 
       }
@@ -96,6 +98,24 @@ class TenantRandomRangeReader(tenantId : Int) extends Actor with Connected {
     ) yield r
     commit
     if (result.size > 0) readThroughHex(offset + result.size)
+    else {
+      close
+      context.stop(self)
+    }
+  }
+
+  @tailrec final def readThroughComboPK(offset: Int) {
+    val num = singleMax//Random.nextInt(singleMax)
+    val result = for (r: Record <- e
+      select(TBL_COMBO_PK.FIRST_NAME, TBL_COMBO_PK.LAST_NAME, TBL_COMBO_PK.EMAIL, TBL_COMBO_PK.TENANT_ID)
+      from TBL_COMBO_PK
+      where TBL_COMBO_PK.TENANT_ID === tenantId
+      limit num
+      offset offset
+      fetch
+    ) yield r
+    commit
+    if (result.size > 0) readThroughComboPK(offset + result.size)
     else {
       close
       context.stop(self)

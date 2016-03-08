@@ -15,25 +15,31 @@ object PerfTests extends App {
 
   implicit val sshOptions = SSHOptions(host = "dbserver", username = "root", password = SSHPassword.string2password("28270033"))
 
-  val xs = "Query against Binary UUID" collect (List(Cpu, Mem, IO, Network)) run {
+  val xs = "Binary UUID" collect (List(Cpu, Mem, IO, Network)) run {
     actorOf(classOf[MultiTenantsReadSimulator], "binary-reader") { reader =>
       reader ! BinaryPK
     }
   }
 
-  val ys = "Query against AutoIncremental PK" collect (List(Cpu, Mem, IO, Network)) run {
+  val ys = "AutoIncremental PK" collect (List(Cpu, Mem, IO, Network)) run {
     actorOf(classOf[MultiTenantsReadSimulator], "auto-incremental-reader") { reader =>
       reader ! AutoIncremental
     }
   }
 
-  val zs = "Query against Hex PK" collect (List(Cpu, Mem, IO, Network)) run {
+  val zs = "Hex PK" collect (List(Cpu, Mem, IO, Network)) run {
     actorOf(classOf[MultiTenantsReadSimulator], "hex-reader") { reader =>
       reader ! HexPK
     }
   }
 
-  val iox = xs ::: ys ::: zs filter (isIO)
+  val cs = "Combo PK" collect (List(Cpu, Mem, IO, Network)) run {
+    actorOf(classOf[MultiTenantsReadSimulator], "combo-reader") { reader =>
+      reader ! ComboPK
+    }
+  }
+
+  val iox = cs ::: xs ::: ys ::: zs filter (isIO)
 
   def isIO : (Monitor) => Boolean = {
     case x: IOMonitor => true

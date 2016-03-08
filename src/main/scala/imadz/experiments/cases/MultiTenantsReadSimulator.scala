@@ -25,6 +25,8 @@ class MultiTenantsReadSimulator extends Actor {
       context.children foreach { x => x ! ReadOp(HexPK)}
     case AutoIncremental =>
       context.children foreach { x => x ! ReadOp(AutoIncremental)}
+    case ComboPK =>
+      context.children foreach { x => x ! ReadOp(ComboPK)}
     case Complete =>
       println(sender.path + " finished read data")
       left -= 1
