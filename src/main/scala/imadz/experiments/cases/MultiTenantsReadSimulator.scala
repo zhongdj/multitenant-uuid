@@ -17,7 +17,7 @@ class MultiTenantsReadSimulator extends Actor {
 
   1 to 10 foreach { x => context.actorOf(TenantRandomRangeReader.props(x), "data-reader-" + x)}
 
-  var left : Int = 2
+  var left : Int = 10
   override def receive: Receive = {
     case BinaryPK =>
       context.children foreach { x => x ! ReadOp(BinaryPK)}
